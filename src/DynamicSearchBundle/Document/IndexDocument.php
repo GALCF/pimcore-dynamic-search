@@ -20,7 +20,7 @@ class IndexDocument
         $this->documentConfiguration = $documentConfiguration;
     }
 
-    public function getDocumentId(): ?int
+    public function getDocumentId(): mixed
     {
         return $this->resourceMeta instanceof ResourceMetaInterface ? $this->resourceMeta->getDocumentId() : null;
     }
