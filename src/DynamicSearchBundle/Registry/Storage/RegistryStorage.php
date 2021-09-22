@@ -54,8 +54,8 @@ class RegistryStorage
     public function hasOneByNamespace(string $namespace)
     {
         return count(array_filter($this->store, static function ($entry) use ($namespace) {
-                return $entry['namespace'] === $namespace;
-            })) > 0;
+            return ($entry['namespace'] ?? null) === $namespace;
+        })) > 0;
     }
 
     public function get(string $namespace, string $identifier)
@@ -74,7 +74,7 @@ class RegistryStorage
     public function getByNamespace(string $namespace): array
     {
         $validRows = array_filter($this->store, function ($entry) use ($namespace) {
-            return $entry['namespace'] === $namespace;
+            return ($entry['namespace'] ?? null) === $namespace;
         });
 
         $items = [];
