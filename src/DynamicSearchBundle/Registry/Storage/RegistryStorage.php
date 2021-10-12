@@ -6,7 +6,7 @@ class RegistryStorage
 {
     protected array $store = [];
 
-    public function store($service, string $requiredInterface, string $namespace, string $identifier, ?string $alias = null, bool $allowMultipleAppearance = false)
+    public function store($service, string $requiredInterface, string $namespace, ?string $identifier = null, ?string $alias = null, bool $allowMultipleAppearance = false)
     {
         if (!isset($this->store[$namespace])) {
             $this->store[$namespace] = [];
@@ -32,7 +32,11 @@ class RegistryStorage
             if ($this->getByIdentifier($namespace, $identifier) !== null) {
                 throw new \Exception(sprintf('Service "%s" for namespace "%s" already has been registered', $identifier, $namespace));
             } elseif ($this->getByAlias($namespace, $alias) !== null) {
-                throw new \Exception(sprintf('Service "%s" for namespace "%s" with alias "%s" already has been registered', $identifier, $namespace, $alias));
+                if ($identifier) {
+                    throw new \Exception(sprintf('Service "%s" for namespace "%s" with alias "%s" already has been registered', $identifier, $namespace, $alias));
+                } else {
+                    throw new \Exception(sprintf('Service for namespace "%s" with alias "%s" already has been registered', $namespace, $alias));
+                }
             }
 
         }
@@ -90,7 +94,7 @@ class RegistryStorage
         return $items;
     }
 
-    protected function getByIdentifier(string $namespace, string $identififer)
+    protected function getByIdentifier(string $namespace, ?string $identififer)
     {
         foreach ($this->store as $entry) {
             if (isset($entry['namespace'], $entry['identifier']) && $entry['namespace'] === $namespace && $entry['identifier'] === $identififer) {
