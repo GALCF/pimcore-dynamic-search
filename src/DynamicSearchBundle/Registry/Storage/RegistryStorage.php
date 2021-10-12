@@ -94,8 +94,12 @@ class RegistryStorage
         return $items;
     }
 
-    protected function getByIdentifier(string $namespace, ?string $identififer)
+    protected function getByIdentifier(string $namespace, ?string $identififer = null)
     {
+        if (!$identififer) {
+            return null;
+        }
+        
         foreach ($this->store as $entry) {
             if (isset($entry['namespace'], $entry['identifier']) && $entry['namespace'] === $namespace && $entry['identifier'] === $identififer) {
                 return $entry['service'];
